@@ -1,0 +1,26 @@
+{
+	"name": "wtl-mini-project",
+	"version": "1.0.0",
+	"description": "mern ecommerce app",
+	"main": "server.js",
+	"scripts": {
+		"start": "node --watch backend backend/server.js",
+		"dev": "nodemon --watch backend backend/server.js",
+		"data:import": "node backend/seeder",
+		"data:destroy": "node backend/seeder -d"
+	},
+	"author": "Vedant Karle",
+	"license": "ISC",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.2",
+		"express-async-handler": "^1.2.0",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.1.4"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	}
+}
