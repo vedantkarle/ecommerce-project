@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Cart from "./screens/Cart";
 import Home from "./screens/Home";
 import Login from "./screens/Login/Login";
+import OrderScreen from "./screens/OrderScreen";
 import Payment from "./screens/Payment";
 import PlaceOrder from "./screens/PlaceOrder";
 import ProductDetail from "./screens/ProductDetail";
@@ -24,6 +25,7 @@ function App() {
 				<Route path='/shipping' element={<Shipping />} />
 				<Route path='/payment' element={<Payment />} />
 				<Route path='/placeorder' element={<PlaceOrder />} />
+				<Route path='/order/:id' element={<OrderScreen />} />
 			</Routes>
 			<Footer />
 		</div>

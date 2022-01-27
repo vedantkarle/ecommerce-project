@@ -1,9 +1,13 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { createOrder } from "../actions/orderActions";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const PlaceOrder = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const cart = useSelector(state => state.cart);
 
 	const addDecimals = num => {
@@ -24,7 +28,29 @@ const PlaceOrder = () => {
 			Number(cart.taxPrice),
 	);
 
-	const placeOrderHandler = () => {};
+	const orderCreate = useSelector(state => state.orderCreate);
+	const { order, success, error } = orderCreate;
+
+	const placeOrderHandler = () => {
+		dispatch(
+			createOrder({
+				orderItems: cart.cartItems,
+				shippingAddress: cart.shippingAddress,
+				paymentMethod: cart.paymentMethod,
+				itemsPrice: cart.itemsPrice,
+				shippingPrice: cart.shippingPrice,
+				taxPrice: cart.taxPrice,
+				totalPrice: cart.totalPrice,
+			}),
+		);
+	};
+
+	useEffect(() => {
+		if (success) {
+			navigate(`/order/${order._id}`);
+		}
+		//eslint-disable-next-line
+	}, [success, navigate]);
 
 	return (
 		<div>
@@ -111,6 +137,17 @@ const PlaceOrder = () => {
 									</div>
 								</div>
 								<hr />
+								{error && (
+									<article
+										className='message is-danger'
+										style={{ margin: "10px" }}>
+										<div
+											className='message-body'
+											style={{ textAlign: "center" }}>
+											{error}
+										</div>
+									</article>
+								)}
 								<button
 									style={{ backgroundColor: "#088178", color: "#fff" }}
 									className='button is-medium is-fullwidth'
