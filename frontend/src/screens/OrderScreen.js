@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 import { getOrderDetails, payOrder } from "../actions/orderActions";
 import { ORDER_PAY_RESET } from "../constants/orderConstants";
 
@@ -52,7 +53,7 @@ const PlaceOrder = () => {
 	};
 
 	return loading ? (
-		<h2>Loading...</h2>
+		<ClipLoader />
 	) : error ? (
 		<article className='message is-danger' style={{ margin: "10px" }}>
 			<div className='message-body' style={{ textAlign: "center" }}>

@@ -59,11 +59,26 @@ const Navbar = () => {
 									</span>
 								</button>
 							</div>
+
 							<div class='dropdown-menu' id='dropdown-menu' role='menu'>
 								<div class='dropdown-content'>
 									<Link to='/profile' className='dropdown-item'>
 										Profile
 									</Link>
+
+									{userInfo?.isAdmin && (
+										<>
+											<Link to='/admin/userList' className='dropdown-item'>
+												Users
+											</Link>
+											<Link to='/admin/products' className='dropdown-item'>
+												Products
+											</Link>
+											<Link to='/admin/orderList' className='dropdown-item'>
+												Orders
+											</Link>
+										</>
+									)}
 									<a href='#' className='dropdown-item' onClick={logoutHandler}>
 										Logout
 									</a>
@@ -71,7 +86,7 @@ const Navbar = () => {
 							</div>
 						</div>
 					) : (
-						<li id='lg-bag'>
+						<li>
 							<Link
 								to='/signin'
 								className={location.pathname === "/signin" ? "active" : ""}>
@@ -79,6 +94,7 @@ const Navbar = () => {
 							</Link>
 						</li>
 					)}
+
 					<li id='lg-bag'>
 						<Link
 							to='/cart'

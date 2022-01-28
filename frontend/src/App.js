@@ -10,6 +10,7 @@ import PlaceOrder from "./screens/PlaceOrder";
 import ProductDetail from "./screens/ProductDetail";
 import Profile from "./screens/Profile";
 import Shipping from "./screens/Shipping";
+import UserListScreen from "./screens/UserListScreen";
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 				<Route path='/payment' element={<Payment />} />
 				<Route path='/placeorder' element={<PlaceOrder />} />
 				<Route path='/order/:id' element={<OrderScreen />} />
+				<Route path='/admin/userList' element={<UserListScreen />} />
 			</Routes>
 			<Footer />
 		</div>
