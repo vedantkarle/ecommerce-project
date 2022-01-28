@@ -9,6 +9,7 @@ import {
 	ORDER_DELIVER_SUCCESS,
 	ORDER_DETAILS_FAIL,
 	ORDER_DETAILS_REQUEST,
+	ORDER_DETAILS_RESET,
 	ORDER_DETAILS_SUCCESS,
 	ORDER_LIST_FAIL,
 	ORDER_LIST_MY_FAIL,
@@ -67,6 +68,8 @@ export const orderDetailsReducer = (
 				loading: false,
 				error: action.payload,
 			};
+		case ORDER_DETAILS_RESET:
+			return { loading: true, order: {}, shippingAddress: {} };
 		default:
 			return state;
 	}

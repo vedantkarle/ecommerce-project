@@ -5,6 +5,7 @@ import { cartReducer } from "./reducers/cartReducer";
 import {
 	orderCreateReducer,
 	orderDetailsReducer,
+	orderPayReducer,
 } from "./reducers/orderReducers";
 import {
 	productDetailsReducer,
@@ -50,6 +51,7 @@ const reducer = combineReducers({
 	userUpdateProfile: userUpdateProfileReducer,
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
+	orderPay: orderPayReducer,
 });
 
 const store = createStore(
