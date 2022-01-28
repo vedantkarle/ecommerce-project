@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { listUsers } from "../actions/userActions";
+import { deleteUser, listUsers } from "../actions/userActions";
 
 const UserListScreen = () => {
 	const dispatch = useDispatch();
@@ -14,13 +14,22 @@ const UserListScreen = () => {
 	const userLogin = useSelector(state => state.userLogin);
 	const { userInfo } = userLogin;
 
+	const userDelete = useSelector(state => state.userDelete);
+	const { success } = userDelete;
+
 	useEffect(() => {
 		if (userInfo && userInfo?.isAdmin) {
 			dispatch(listUsers());
 		} else {
 			navigate("/signin");
 		}
-	}, [dispatch, navigate]);
+	}, [dispatch, navigate, userInfo, success]);
+
+	const deleteHandler = async id => {
+		if (window.confirm("Are your sure")) {
+			dispatch(deleteUser(id));
+		}
+	};
 
 	return (
 		<div className='section-p1'>
@@ -65,14 +74,16 @@ const UserListScreen = () => {
 									)}
 								</td>
 								<td style={{ display: "flex", justifyContent: "center" }}>
-									<Link to={`/users/${user._id}`}>
+									<Link to={`/admin/user/${user._id}`}>
 										<button className='button is-warning'>
 											<span className='icon is-small'>
 												<i className='fas fa-edit'></i>
 											</span>
 										</button>
 									</Link>
-									<button className='button is-danger'>
+									<button
+										className='button is-danger'
+										onClick={() => deleteHandler(user?._id)}>
 										<span className='icon is-small'>
 											<i className='fas fa-trash'></i>
 										</span>
