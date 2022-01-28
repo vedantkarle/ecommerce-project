@@ -64,7 +64,7 @@ const PlaceOrder = () => {
 			<div className='column is-two-thirds is-half-mobile'>
 				<h3>
 					<strong>
-						<span class='tag is-success is-large'>ORDER #{order._id}</span>
+						<span class='tag is-success is-large'>ORDER #{order?._id}</span>
 					</strong>
 				</h3>
 				<br />

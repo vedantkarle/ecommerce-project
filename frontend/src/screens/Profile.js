@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { listMyOrders } from "../actions/orderActions";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 
 const Profile = () => {
@@ -22,12 +23,16 @@ const Profile = () => {
 	const userUpdateProfile = useSelector(state => state.userUpdateProfile);
 	const { success } = userUpdateProfile;
 
+	const orderListMy = useSelector(state => state.orderListMy);
+	const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
+
 	useEffect(() => {
 		if (!userInfo) {
 			navigate("/signin");
 		} else {
 			if (!user.name) {
 				dispatch(getUserDetails("profile"));
+				dispatch(listMyOrders());
 			} else {
 				setName(user.name);
 				setEmail(user.email);
@@ -135,7 +140,64 @@ const Profile = () => {
 					</form>
 				</div>
 				<div className='column'>
-					<h2>Orders</h2>
+					<h3>
+						<strong>Orders</strong>
+					</h3>
+					<hr />
+					{loadingOrders ? (
+						<h3>Loading...</h3>
+					) : errorOrders ? (
+						<article className='message is-danger' style={{ margin: "10px" }}>
+							<div className='message-body' style={{ textAlign: "center" }}>
+								{errorOrders}
+							</div>
+						</article>
+					) : (
+						<table className='table is-striped is-bordered'>
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>DATE</th>
+									<th>TOTAL</th>
+									<th>PAID</th>
+									<th>DELIVERED</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{orders?.map(o => (
+									<tr key={o?._id}>
+										<td>{o?._id}</td>
+										<td>{o.createdAt.substring(0, 10)}</td>
+										<td>Rs.{o?.totalPrice}</td>
+										<td>
+											{o?.isPaid ? (
+												o.paidAt.substring(0, 10)
+											) : (
+												<i
+													className='fas fa-times'
+													style={{ color: "red" }}></i>
+											)}
+										</td>
+										<td style={{ textAlign: "center" }}>
+											{o?.isDelivered ? (
+												o.deliveredAt.substring(0, 10)
+											) : (
+												<i
+													className='fas fa-times'
+													style={{ color: "red" }}></i>
+											)}
+										</td>
+										<td>
+											<Link to={`/order/${o._id}`}>
+												<button className='button is-primary'>Details</button>
+											</Link>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					)}
 				</div>
 			</div>
 		</div>
