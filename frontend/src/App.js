@@ -8,6 +8,7 @@ import OrderScreen from "./screens/OrderScreen";
 import Payment from "./screens/Payment";
 import PlaceOrder from "./screens/PlaceOrder";
 import ProductDetail from "./screens/ProductDetail";
+import ProductListScreen from "./screens/ProductListScreen";
 import Profile from "./screens/Profile";
 import Shipping from "./screens/Shipping";
 import UserEdit from "./screens/UserEdit";
@@ -30,6 +31,7 @@ function App() {
 				<Route path='/order/:id' element={<OrderScreen />} />
 				<Route path='/admin/userList' element={<UserListScreen />} />
 				<Route path='/admin/user/:id' element={<UserEdit />} />
+				<Route path='/admin/productList' element={<ProductListScreen />} />
 			</Routes>
 			<Footer />
 		</div>

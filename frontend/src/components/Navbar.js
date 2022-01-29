@@ -71,7 +71,7 @@ const Navbar = () => {
 											<Link to='/admin/userList' className='dropdown-item'>
 												Users
 											</Link>
-											<Link to='/admin/products' className='dropdown-item'>
+											<Link to='/admin/productList' className='dropdown-item'>
 												Products
 											</Link>
 											<Link to='/admin/orderList' className='dropdown-item'>
