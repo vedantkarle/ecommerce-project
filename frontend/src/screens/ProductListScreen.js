@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { deleteProduct, listProducts } from "../actions/productActions";
+import {
+	createProduct,
+	deleteProduct,
+	listProducts,
+} from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 
 const ProductListScreen = () => {
 	const dispatch = useDispatch();
@@ -16,20 +21,49 @@ const ProductListScreen = () => {
 	const { userInfo } = userLogin;
 
 	const productDelete = useSelector(state => state.productDelete);
-	const { loading: loadingDelete, error: errorDelete, success } = productDelete;
+	const {
+		loading: loadingDelete,
+		error: errorDelete,
+		success: successDelete,
+	} = productDelete;
+
+	const productCreate = useSelector(state => state.productCreate);
+	const {
+		loading: loadingCreate,
+		error: errorCreate,
+		success: successCreate,
+		product: createdProduct,
+	} = productCreate;
 
 	useEffect(() => {
-		if ((userInfo && userInfo?.isAdmin) || success) {
-			dispatch(listProducts());
-		} else {
+		dispatch({ type: PRODUCT_CREATE_RESET });
+
+		if (!userInfo?.isAdmin) {
 			navigate("/signin");
 		}
-	}, [dispatch, navigate, userInfo, success]);
+
+		if (successCreate) {
+			navigate(`/admin/product/${createdProduct._id}/edit`);
+		} else {
+			dispatch(listProducts());
+		}
+	}, [
+		dispatch,
+		navigate,
+		userInfo,
+		successDelete,
+		successCreate,
+		createdProduct,
+	]);
 
 	const deleteHandler = async id => {
 		if (window.confirm("Are your sure")) {
 			dispatch(deleteProduct(id));
 		}
+	};
+
+	const createProductHandler = product => {
+		dispatch(createProduct());
 	};
 
 	return (
@@ -48,18 +82,18 @@ const ProductListScreen = () => {
 					</h3>
 				</div>
 				<div style={{ marginLeft: "10px" }}>
-					<button className='button'>
+					<button className='button' onClick={createProductHandler}>
 						<i className='fas fa-plus'></i>Create Product
 					</button>
 				</div>
 			</div>
 			<hr />
-			{loading || loadingDelete ? (
+			{loading || loadingDelete || loadingCreate ? (
 				<ClipLoader />
-			) : error || errorDelete ? (
+			) : error || errorDelete || errorCreate ? (
 				<article className='message is-danger' style={{ margin: "10px" }}>
 					<div className='message-body' style={{ textAlign: "center" }}>
-						{error || errorDelete}
+						{error || errorDelete || errorCreate}
 					</div>
 				</article>
 			) : (
@@ -83,7 +117,7 @@ const ProductListScreen = () => {
 								<td>{product.category}</td>
 								<td>{product.brand}</td>
 								<td style={{ display: "flex", justifyContent: "center" }}>
-									<Link to={`/admin/product/${product._id}`}>
+									<Link to={`/admin/product/${product._id}/edit`}>
 										<button className='button is-warning'>
 											<span className='icon is-small'>
 												<i className='fas fa-edit'></i>
