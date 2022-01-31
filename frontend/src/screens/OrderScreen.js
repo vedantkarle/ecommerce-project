@@ -4,8 +4,15 @@ import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { getOrderDetails, payOrder } from "../actions/orderActions";
-import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import {
+	deliverOrder,
+	getOrderDetails,
+	payOrder,
+} from "../actions/orderActions";
+import {
+	ORDER_DELIVER_RESET,
+	ORDER_PAY_RESET,
+} from "../constants/orderConstants";
 
 const PlaceOrder = () => {
 	const [sdkReady, setSdkReady] = useState(false);
@@ -14,11 +21,17 @@ const PlaceOrder = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
 
+	const userLogin = useSelector(state => state.userLogin);
+	const { userInfo } = userLogin;
+
 	const orderDetails = useSelector(state => state.orderDetails);
 	const { order, loading, error } = orderDetails;
 
 	const orderPay = useSelector(state => state.orderPay);
 	const { loading: loadingPay, success: successPay } = orderPay;
+
+	const orderDeliver = useSelector(state => state.orderDeliver);
+	const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
 	useEffect(() => {
 		const addPaypalScript = async () => {
@@ -33,9 +46,13 @@ const PlaceOrder = () => {
 			document.body.appendChild(script);
 		};
 
-		if (Object.keys(order).length === 0 || successPay) {
-			// dispatch({ type: ORDER_DETAILS_RESET });
+		if (!userInfo) {
+			navigate("/signin");
+		}
+
+		if (Object.keys(order).length === 0 || successPay || successDeliver) {
 			dispatch({ type: ORDER_PAY_RESET });
+			dispatch({ type: ORDER_DELIVER_RESET });
 			dispatch(getOrderDetails(id));
 		} else if (!order.isPaid) {
 			if (!window.paypal) {
@@ -44,12 +61,16 @@ const PlaceOrder = () => {
 				setSdkReady(true);
 			}
 		}
-	}, [dispatch, id, successPay, order]);
+	}, [dispatch, id, successPay, order, successDeliver]);
 
 	const successPaymentHandler = paymentResult => {
 		dispatch(
 			payOrder(id, { ...paymentResult, email_address: order?.user?.email }),
 		);
+	};
+
+	const deliverHandler = () => {
+		dispatch(deliverOrder(order));
 	};
 
 	return loading ? (
@@ -86,8 +107,8 @@ const PlaceOrder = () => {
 						{order.shippingAddress.postalCode}, {order.shippingAddress.country}
 					</p>
 					{order?.isDelivered ? (
-						<article className='message is-success' style={{ margin: "10px" }}>
-							<div className='message-body' style={{ textAlign: "center" }}>
+						<article className='message is-success'>
+							<div className='message-body'>
 								Delivered on {order.deliveredAt}
 							</div>
 						</article>
@@ -185,6 +206,19 @@ const PlaceOrder = () => {
 									onSuccess={successPaymentHandler}
 								/>
 							)}
+						</div>
+					)}
+					{userInfo?.isAdmin && order?.isPaid && !order?.isDelivered && (
+						<div style={{ padding: "10px" }}>
+							<button
+								className={
+									loadingDeliver
+										? "button is-success is-fullwidth is-loading"
+										: "button is-success is-fullwidth"
+								}
+								onClick={deliverHandler}>
+								Mark As Delivered
+							</button>
 						</div>
 					)}
 				</div>
