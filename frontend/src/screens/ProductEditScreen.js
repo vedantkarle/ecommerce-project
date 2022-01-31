@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -13,6 +14,7 @@ const ProductEditScreen = () => {
 	const [category, setCategory] = useState("");
 	const [countInStock, setCountInStock] = useState(0);
 	const [description, setDescription] = useState("");
+	const [uploading, setUploading] = useState(false);
 
 	const { id } = useParams();
 	const dispatch = useDispatch();
@@ -61,6 +63,32 @@ const ProductEditScreen = () => {
 				description,
 			}),
 		);
+	};
+
+	const uploadFileHandler = async e => {
+		const file = e.target.files[0];
+		const formData = new FormData();
+		formData.append("image", file);
+		setUploading(true);
+
+		try {
+			const config = {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			};
+
+			const { data } = await axios.post("/api/upload", formData, config);
+
+			console.log(data);
+
+			setImage(data);
+
+			setUploading(false);
+		} catch (e) {
+			console.error(e);
+			setUploading(false);
+		}
 	};
 
 	return (
@@ -116,15 +144,31 @@ const ProductEditScreen = () => {
 						</div>
 						<div className='field'>
 							<label className='label'>Image</label>
-							<div className='control'>
-								<input
-									className='input is-rounded'
-									type='text'
-									placeholder='Enter image url'
-									value={image}
-									onChange={e => setImage(e.target.value)}
-								/>
+							<div className='file is-fullwidth'>
+								<label className='file-label'>
+									<input
+										className='file-input'
+										type='file'
+										name='image'
+										onChange={uploadFileHandler}
+									/>
+									<span className='file-cta'>
+										<span className='file-icon'>
+											<i className='fas fa-upload'></i>
+										</span>
+										<span className='file-label'>Choose a file…</span>
+									</span>
+									<span className='file-name'>
+										{image ? image : "No file uploaded"}
+									</span>
+								</label>
 							</div>
+							{uploading && <br />}
+							{uploading && (
+								<progress className='progress is-small is-primary' max='100'>
+									15%
+								</progress>
+							)}
 						</div>
 						<div className='field'>
 							<label className='label'>Brand</label>

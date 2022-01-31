@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const { connectDB } = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
@@ -6,6 +7,7 @@ require("dotenv").config();
 const productRoutes = require("./routes/product.routes");
 const userRoutes = require("./routes/user.routes");
 const orderRoutes = require("./routes/order.routes");
+const uploadRoutes = require("./routes/upload.routes");
 
 const app = express();
 
@@ -16,10 +18,13 @@ app.use(express.json());
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/api/config/paypal", (req, res) => {
 	res.send(process.env.PAYPAL_CLIENT_ID);
 });
+
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(notFound);
 

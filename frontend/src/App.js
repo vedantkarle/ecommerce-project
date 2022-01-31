@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Cart from "./screens/Cart";
 import Home from "./screens/Home";
 import Login from "./screens/Login/Login";
+import OrderListScreen from "./screens/OrderListScreen";
 import OrderScreen from "./screens/OrderScreen";
 import Payment from "./screens/Payment";
 import PlaceOrder from "./screens/PlaceOrder";
@@ -34,6 +35,7 @@ function App() {
 				<Route path='/admin/user/:id' element={<UserEdit />} />
 				<Route path='/admin/productList' element={<ProductListScreen />} />
 				<Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
+				<Route path='/admin/orderList' element={<OrderListScreen />} />
 			</Routes>
 			<Footer />
 		</div>
