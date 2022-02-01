@@ -25,11 +25,11 @@ const SearchBox = () => {
 				/>
 			</div>
 			<div className='control' onClick={submitHandler}>
-				<a
+				<span
 					className='button'
 					style={{ backgroundColor: "#088178", color: "#fff" }}>
 					Search
-				</a>
+				</span>
 			</div>
 		</div>
 	);

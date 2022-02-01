@@ -22,9 +22,9 @@ const Product = ({
 				<Rating value={3.6} text={`${numReviews} reviews`} color='gold' />
 				<h4>₹{price}</h4>
 			</div>
-			<a href='#'>
+			<span>
 				<i class='fal fa-shopping-cart cart'></i>
-			</a>
+			</span>
 		</div>
 	);
 };

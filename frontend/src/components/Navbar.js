@@ -21,12 +21,12 @@ const Navbar = () => {
 	return (
 		<section id='header'>
 			<Link to='/'>
-				<img className='logo' src='/images/Amazona.svg' />
+				<img className='logo' src='/images/Amazona.svg' alt='logo' />
 			</Link>
 			<div>
 				<ul id='navbar'>
 					<SearchBox />
-					<Link to='#' id='close'>
+					<Link to='/' id='close'>
 						<i className='far fa-times'></i>
 					</Link>
 					<li>
@@ -81,9 +81,9 @@ const Navbar = () => {
 											</Link>
 										</>
 									)}
-									<a href='#' className='dropdown-item' onClick={logoutHandler}>
+									<span className='dropdown-item' onClick={logoutHandler}>
 										Logout
-									</a>
+									</span>
 								</div>
 							</div>
 						</div>

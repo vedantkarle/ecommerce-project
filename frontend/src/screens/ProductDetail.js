@@ -42,7 +42,7 @@ const ProductDetail = () => {
 			dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
 		}
 		dispatch(detailsProduct(id));
-	}, [successProductReview, dispatch]);
+	}, [successProductReview, dispatch, id]);
 
 	return (
 		<div className='section-p1'>
@@ -72,7 +72,7 @@ const ProductDetail = () => {
 			) : (
 				<div id='prodetails' className='section-p1'>
 					<div className='single-pro-image'>
-						<img src={product?.image} width='100%' />
+						<img src={product?.image} width='100%' alt={product?.name} />
 					</div>
 					<div className='single-pro-details'>
 						<h6>Home / {product?.category}</h6>

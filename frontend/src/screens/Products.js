@@ -8,7 +8,7 @@ import Product from "../components/Product";
 const Products = () => {
 	const productList = useSelector(state => state.productList);
 
-	const { loading, error, products, pages, page } = productList;
+	const { products, pages, page } = productList;
 
 	const dispatch = useDispatch();
 	const { keyword, pageNumber } = useParams();

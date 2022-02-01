@@ -7,7 +7,7 @@ import Product from "../components/Product";
 const Home = props => {
 	const productList = useSelector(state => state.productList);
 
-	const { loading, error, products } = productList;
+	const { products } = productList;
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();

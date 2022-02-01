@@ -61,7 +61,7 @@ const PlaceOrder = () => {
 				setSdkReady(true);
 			}
 		}
-	}, [dispatch, id, successPay, order, successDeliver]);
+	}, [dispatch, id, successPay, order, successDeliver, userInfo, navigate]);
 
 	const successPaymentHandler = paymentResult => {
 		dispatch(

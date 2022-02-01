@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { listOrders } from "../actions/orderActions";
 
 const OrderListScreen = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const params = useParams();
 
 	const orderList = useSelector(state => state.orderList);
 	const { loading, error, orders } = orderList;
