@@ -11,6 +11,7 @@ import PlaceOrder from "./screens/PlaceOrder";
 import ProductDetail from "./screens/ProductDetail";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import Products from "./screens/Products";
 import Profile from "./screens/Profile";
 import Shipping from "./screens/Shipping";
 import UserEdit from "./screens/UserEdit";
@@ -23,6 +24,9 @@ function App() {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/signin' element={<Login />} />
+				<Route path='/products' element={<Products />} />
+				<Route path='/search/:keyword' element={<Products />} />
+				<Route path='/products/page/:pageNumber' element={<Products />} />
 				<Route path='/products/:id' element={<ProductDetail />} />
 				<Route path='/cart' element={<Cart />} />
 				<Route path='/cart/:id' element={<Cart />} />
@@ -36,7 +40,6 @@ function App() {
 				<Route path='/admin/productList' element={<ProductListScreen />} />
 				<Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
 				<Route path='/admin/orderList' element={<OrderListScreen />} />
-				<Route path='/search/:keyword' element={<Home />} />
 			</Routes>
 			<Footer />
 		</div>

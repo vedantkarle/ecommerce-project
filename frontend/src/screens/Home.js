@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { listProducts } from "../actions/productActions";
 import Product from "../components/Product";
 
@@ -10,10 +10,10 @@ const Home = props => {
 	const { loading, error, products } = productList;
 
 	const dispatch = useDispatch();
-	const { keyword } = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		dispatch(listProducts(keyword));
+		dispatch(listProducts());
 	}, [dispatch]);
 
 	return (
@@ -57,6 +57,11 @@ const Home = props => {
 						/>
 					))}
 				</div>
+				<button
+					className='button is-medium'
+					onClick={() => navigate("/products")}>
+					View All
+				</button>
 			</section>
 
 			<section id='banner' className='section-m1'>
