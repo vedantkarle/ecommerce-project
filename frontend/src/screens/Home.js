@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { listProducts } from "../actions/productActions";
 import Product from "../components/Product";
 
@@ -9,10 +10,11 @@ const Home = props => {
 	const { loading, error, products } = productList;
 
 	const dispatch = useDispatch();
+	const { keyword } = useParams();
 
 	useEffect(() => {
-		dispatch(listProducts());
-	}, []);
+		dispatch(listProducts(keyword));
+	}, [dispatch]);
 
 	return (
 		<div>

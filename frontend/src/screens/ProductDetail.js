@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { detailsProduct } from "../actions/productActions";
+import { createProductReview, detailsProduct } from "../actions/productActions";
 import Rating from "../components/Rating";
 import Review from "../components/Review";
+import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
 
 const ProductDetail = () => {
 	const [qty, setQty] = useState(1);
+	const [rating, setRating] = useState(0);
+	const [comment, setComment] = useState("");
 
-	const { loading, error, product } = useSelector(
-		state => state.productDetails,
-	);
+	const productDetails = useSelector(state => state.productDetails);
+	const { loading, error, product } = productDetails;
+
+	const userLogin = useSelector(state => state.userLogin);
+	const { userInfo } = userLogin;
+
+	const productReviewCreate = useSelector(state => state.productReviewCreate);
+	const { error: errorProductReview, success: successProductReview } =
+		productReviewCreate;
+
 	const dispatch = useDispatch();
 	const { id } = useParams();
 	const navigate = useNavigate();
@@ -19,9 +29,20 @@ const ProductDetail = () => {
 		navigate(`/cart/${id}?qty=${qty}`);
 	};
 
+	const submitHandler = e => {
+		e.preventDefault();
+		dispatch(createProductReview(id, { rating, comment }));
+	};
+
 	useEffect(() => {
+		if (successProductReview) {
+			alert("Review successfully submitted");
+			setRating(0);
+			setComment("");
+			dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+		}
 		dispatch(detailsProduct(id));
-	}, []);
+	}, [successProductReview, dispatch]);
 
 	return (
 		<div className='section-p1'>
@@ -93,12 +114,81 @@ const ProductDetail = () => {
 					</div>
 				</div>
 			)}
+			<hr />
 			{product && (
-				<div className='section-p1'>
+				<div>
 					<h4>Reviews</h4>
-					<Review />
+					{product?.reviews?.length === 0 && (
+						<article className='message is-info'>
+							<div className='message-body'>No Reviews</div>
+						</article>
+					)}
+					{product?.reviews?.map(review => (
+						<Review
+							key={review._id}
+							name={review.name}
+							comment={review.comment}
+							rating={review.rating}
+							createdAt={review.createdAt}
+						/>
+					))}
 				</div>
 			)}
+			<br />
+			<div>
+				<h4>Write a customer review</h4>
+				{errorProductReview && (
+					<article className='message is-danger'>
+						<div className='message-body'>{errorProductReview}</div>
+					</article>
+				)}
+				{userInfo ? (
+					<form onSubmit={submitHandler}>
+						<div className='field'>
+							<label className='label'>Subject</label>
+							<div className='control'>
+								<div className='select'>
+									<select
+										value={rating}
+										onChange={e => setRating(e.target.value)}>
+										<option value='1'>1 - Poor</option>
+										<option value='2'>2 - Fair</option>
+										<option value='3'>3 - Good</option>
+										<option value='4'>4 - Very Good</option>
+										<option value='5'>5 - Excellent</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div className='field'>
+							<label className='label'>Comment</label>
+							<div className='control'>
+								<textarea
+									className='textarea'
+									placeholder='Comment'
+									onChange={e => setComment(e.target.value)}>
+									{comment}
+								</textarea>
+							</div>
+						</div>
+
+						<div class='field is-grouped'>
+							<div class='control'>
+								<button class='button is-link' type='submit'>
+									Submit
+								</button>
+							</div>
+						</div>
+					</form>
+				) : (
+					<article className='message is-info'>
+						<div className='message-body'>
+							Please <Link to='/signin'>Login</Link> to post a review
+						</div>
+					</article>
+				)}
+			</div>
 		</div>
 	);
 };

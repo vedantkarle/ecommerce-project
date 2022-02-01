@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { logout } from "../actions/userActions";
+import SearchBox from "./SearchBox";
 
 const Navbar = () => {
 	const [isActive, setIsActive] = useState(false);
@@ -24,6 +25,7 @@ const Navbar = () => {
 			</Link>
 			<div>
 				<ul id='navbar'>
+					<SearchBox />
 					<Link to='#' id='close'>
 						<i className='far fa-times'></i>
 					</Link>

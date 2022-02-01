@@ -24,26 +24,26 @@ import {
 } from "../constants/productConstants";
 import { logout } from "./userActions";
 
-export const listProducts = () => async dispatch => {
-	dispatch({
-		type: PRODUCT_LIST_REQUEST,
-	});
-	try {
-		const { data } = await axios.get("/api/products");
-
-		console.log(data);
-
-		dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
-	} catch (error) {
+export const listProducts =
+	(keyword = "") =>
+	async dispatch => {
 		dispatch({
-			type: PRODUCT_LIST_FAIL,
-			payload:
-				error.response && error.response.data.message
-					? error.response.data.message
-					: error.message,
+			type: PRODUCT_LIST_REQUEST,
 		});
-	}
-};
+		try {
+			const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+
+			dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
+		} catch (error) {
+			dispatch({
+				type: PRODUCT_LIST_FAIL,
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+			});
+		}
+	};
 
 export const detailsProduct = id => async dispatch => {
 	dispatch({ type: PRODUCT_DETAILS_REQUEST });
